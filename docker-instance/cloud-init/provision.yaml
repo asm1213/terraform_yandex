@@ -8,7 +8,7 @@ packages:
   - containerd.io 
   - docker-compose-plugin
 apt:
-  preserve_sources_list: true
+  #preserve_sources_list: true
   sources:
     docker-repo:
       source: deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable
@@ -75,21 +75,27 @@ apt:
         YT90qFF93M3v01BbxP+EIY2/9tiIPbrd
         =0YYh
         -----END PGP PUBLIC KEY BLOCK-----
-users:
-    - name: mydocker
-      groups: sudo
-      shell: /bin/bash
-      sudo: ['ALL=(ALL) NOPASSWD:ALL']
-      ssh_authorized_keys:
-      #   - <past ssh key here>
+# users:
+#     - name: docker
+#       groups: docker
+#       shell: /bin/bash
+#       sudo: ['ALL=(ALL) NOPASSWD:ALL']
+#       ssh_authorized_keys:
+#         - <past ssh key here>
 write_files:
-- content: |
-    [Service]
-    ExecStart=
-     ExecStart=/usr/bin/dockerd
-  path: /etc/systemd/system/docker.service.d/override.conf
-- content: |
-    {"hosts": ["tcp://0.0.0.0:2375", "unix:///var/run/docker.sock"]}
-  path: /etc/docker/daemon.json
-  runcmd:
-    - [ sh, -c, systemd restart docker ]
+  - content: |
+      [Service]
+      ExecStart=
+      ExecStart=/usr/bin/dockerd
+    path: /etc/systemd/system/docker.service.d/override.conf
+  - content: |
+      {"hosts": ["tcp://0.0.0.0:2375", "unix:///var/run/docker.sock"]}
+    path: /etc/docker/daemon.json
+  - content: |
+      net.ipv6.conf.all.disable_ipv6 = 1 
+      net.ipv6.conf.default.disable_ipv6 = 1
+      vm.max_map_count = 262144
+    path: /etc/sysctl.d/custom.conf
+runcmd:
+  - [sh, -c, 'systemd restart docker']
+  - [sh, -c, 'sysctl -p /etc/sysctl.d/custom.conf']
