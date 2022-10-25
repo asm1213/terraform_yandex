@@ -1,11 +1,3 @@
-
-provider "yandex" {
-  token     = var.yctoken
-  cloud_id  = var.ycloudid
-  folder_id = var.ycfolderid
-  zone      = "ru-central1-a"
-}
-
 resource "yandex_compute_instance" "test-ubuntu22" {
   name                      = "test-ubuntu22"
   platform_id               = "standard-v2"
