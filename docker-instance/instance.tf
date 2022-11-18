@@ -22,7 +22,9 @@ resource "yandex_compute_instance" "test-ubuntu22" {
   }
 
   metadata = {
-    user-data = file("${path.module}/cloud-init/provision.yaml")
+    # ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
+    # user-data = file("${path.module}/cloud-init/provision.yaml")
+    
   }
 
   scheduling_policy {

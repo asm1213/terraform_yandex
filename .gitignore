@@ -1,4 +1,5 @@
 #**/<dir>
 *.tfvars
 **/.terraform
-*.tfstate
+*.tfstate*
+*lock*
